@@ -6,7 +6,7 @@ import ntpath
 
 ### SETTINGS ###
 
-filePath = "faint.mp4"
+filePath = "medium.mp4"
 
 # if the object in motion is moving slower than the speedThreshold, it will be ignored.
 motionSpeedThreshold = 15
@@ -30,7 +30,7 @@ debounceLimit = 3
 
 # change to True to show a video with rectangles around detected motion
 # this can be useful for playing with the thresholds
-showVideo = True 
+showVideo = False 
 
 
 
@@ -94,13 +94,13 @@ while True:
 
 			(x,y,w,h) = cv2.boundingRect(contour)
 
-			# only log a single detected motion per frame
-			if abs(prevX - x) + abs(prevY - y) < motionSpeedThreshold:
+			distanceMoved = abs(prevX - x) + abs(prevY - y)
+			if distanceMoved < motionSpeedThreshold:
 				prevX = x
 				prevY = y
 				continue
 
-			if j == 1:
+			if j == 1: # only log a single detected motion per frame
 				if debounceCount == 0:
 					seconds = i / fps
 					secondsDisplay = math.floor((seconds % 60 * 10)) / 10
