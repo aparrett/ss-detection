@@ -39,7 +39,9 @@ You can view the results of the script in the folder you executed the script fro
 
 If you run the script on the same video multiple times, you will get duplicate files created and duplicate logs in `log.txt`. If you're testing different thresholds, you will probably want to delete your logs/yourVideoName folder after every run.
 
+Sometimes you may find that it doesn't look like there is a meteor in the image. It would still worth be visiting that timestamp in the video because it could be showing the very beginning or very end of a faint meteor.
+
 ## Customization
 
-- The thresholds can be adjusted to your liking if the script is not detecting all of the meteors or if there are too many false positives. Just be careful that you're not excluding faint meteors; the script doesn't differentiate between faint meteors and airplanes very well (yet).
+- The thresholds can be adjusted to your liking if the script is not detecting all of the meteors or if there are too many false positives. Just be careful that you're not excluding faint meteors.
 - If you're playing with the thresholds, it can be useful to change showVideo from `False` to `True` so that you can see the video detecting (or not detecting) meteors as it plays. I'm not sure how the performance of this will be with longer videos, though.

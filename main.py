@@ -8,7 +8,7 @@ import ntpath
 
 filePath = "medium.mp4"
 
-# if the object in motion is moving slower than the speedThreshold, it will be ignored.
+# if the object in motion is moving slower than the speedThreshold, it will be ignored *after the initial detection*.
 motionSpeedThreshold = 15
 
 # strength of noise removal
