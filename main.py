@@ -27,7 +27,7 @@ debounceLimit = 3
 
 # change to True to show a video with rectangles around detected motion
 # this can be useful for playing with the thresholds
-showVideo = True 
+showVideo = False 
 
 
 
