@@ -8,6 +8,9 @@ import ntpath
 
 filePath = "faint.mp4"
 
+# if the object in motion is moving slower than the speedThreshold, it will be ignored.
+motionSpeedThreshold = 15
+
 # strength of noise removal
 # default: 11
 blurThreshold = 11 
@@ -20,14 +23,14 @@ differenceThreshold = 10
 # default: 100
 sizeOfMovementThreshold = 100 
 
-# number of frames do you want to skip before creating another new file so we don't have 100 pictures of every meteor
+# number of frames to skip before creating another new file so we don't have 100 pictures of every meteor
 # set to 1 to remove debounce
 # default: 3
 debounceLimit = 3
 
 # change to True to show a video with rectangles around detected motion
 # this can be useful for playing with the thresholds
-showVideo = False 
+showVideo = True 
 
 
 
@@ -56,6 +59,8 @@ fps = video.get(cv2.CAP_PROP_FPS)
 background = None
 i = 0
 debounceCount = 0
+prevX = 0
+prevY = 0
 
 while True:
 	i += 1
@@ -87,7 +92,14 @@ while True:
 		if cv2.contourArea(contour) > sizeOfMovementThreshold :
 			j += 1
 
+			(x,y,w,h) = cv2.boundingRect(contour)
+
 			# only log a single detected motion per frame
+			if abs(prevX - x) + abs(prevY - y) < motionSpeedThreshold:
+				prevX = x
+				prevY = y
+				continue
+
 			if j == 1:
 				if debounceCount == 0:
 					seconds = i / fps
@@ -103,8 +115,9 @@ while True:
 				if debounceCount == debounceLimit:
 					debounceCount = 0
 
+			prevX = x
+			prevY = y
 			if (showVideo == True):
-				(x,y,w,h) = cv2.boundingRect(contour)
 				cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0), 3)
 
 	if (showVideo == True):
