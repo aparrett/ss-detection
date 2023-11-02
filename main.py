@@ -32,7 +32,7 @@ debounceLimit = 3
 # this can be useful for playing with the thresholds
 showVideo = False 
 
-# change to True to include the green rectangle in the saved screenshot
+# change to True to include an outline (a green rectangle) of the detected motion in the saved screenshot
 saveOutline = False
 
 
