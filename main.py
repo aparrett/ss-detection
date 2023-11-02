@@ -14,11 +14,11 @@ motionSpeedThreshold = 15
 
 # strength of noise removal
 # default: 11
-blurThreshold = 11 
+blurThreshold = 15 
 
 # comparison threshold
 # default: 10
-differenceThreshold = 10 
+differenceThreshold = 20
 
 # motion less than this size will be ignored
 # default: 100
