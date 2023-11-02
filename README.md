@@ -48,4 +48,4 @@ Sometimes you may find that it doesn't look like there is a meteor in the image.
 
 ## Noise
 
-If you have a noisy image that is getting a lot of false positives, trying using a blur threshold of 15 and difference threshold of 20. This will 
+If you have a noisy image that is getting a lot of false positives, trying using a blur threshold of 15 and difference threshold of 20. This will reduce the amount of faint meteors that are picked up but it will also drastically reduce false positives on certain videos.

@@ -9,6 +9,7 @@ import ntpath
 filePath = "medium.mp4"
 
 # if the object in motion is moving slower than the speedThreshold, it will be ignored *after the initial detection*.
+# default: 15
 motionSpeedThreshold = 15
 
 # strength of noise removal
@@ -33,7 +34,7 @@ debounceLimit = 3
 showVideo = False 
 
 # change to True to include an outline (a green rectangle) of the detected motion in the saved screenshot
-saveOutline = False
+saveOutline = True
 
 
 ### Program ###
