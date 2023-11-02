@@ -45,3 +45,7 @@ Sometimes you may find that it doesn't look like there is a meteor in the image.
 
 - The thresholds can be adjusted to your liking if the script is not detecting all of the meteors or if there are too many false positives. Just be careful that you're not excluding faint meteors.
 - If you're playing with the thresholds, it can be useful to change showVideo from `False` to `True` so that you can see the video detecting (or not detecting) meteors as it plays. I'm not sure how the performance of this will be with longer videos, though.
+
+## Noise
+
+If you have a noisy image that is getting a lot of false positives, trying using a blur threshold of 15 and difference threshold of 20. This will 

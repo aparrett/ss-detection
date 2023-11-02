@@ -32,6 +32,8 @@ debounceLimit = 3
 # this can be useful for playing with the thresholds
 showVideo = False 
 
+# change to True to include the green rectangle in the saved screenshot
+saveOutline = False
 
 
 ### Program ###
@@ -104,11 +106,14 @@ while True:
 				if debounceCount == 0:
 					seconds = i / fps
 					secondsDisplay = math.floor((seconds % 60 * 10)) / 10
-					minutesDisplay = math.floor(seconds / 60)
+					minutesDisplay = math.floor((seconds / 60) % 60)
 					hoursDisplay = math.floor(seconds / 60 / 60)
 					motionTimestamp = f'{hoursDisplay}h-{minutesDisplay}m-{secondsDisplay}s'
 					log.write(f'Detected motion at {motionTimestamp} \n')
 					print(f'Detected motion at {motionTimestamp}')
+
+					if (saveOutline == True):
+						cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0), 1)
 					cv2.imwrite(f'{outputPath}/motion-{motionTimestamp}.jpg', frame)
 
 				debounceCount += 1
@@ -118,7 +123,7 @@ while True:
 			prevX = x
 			prevY = y
 			if (showVideo == True):
-				cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0), 3)
+				cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0), 1)
 
 	if (showVideo == True):
 		cv2.imshow("All Contours", frame)
