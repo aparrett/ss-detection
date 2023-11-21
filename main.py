@@ -28,11 +28,6 @@ differenceThreshold = 10
 # default: 100
 sizeOfMovementThreshold = 100
 
-# number of frames to skip before creating another new file so we don't have 100 pictures of every meteor
-# set to 1 to remove debounce
-# default: 3
-debounceLimit = 3
-
 # change to True to show a video with rectangles around detected motion
 # this can be useful for playing with the thresholds
 showVideo = False # this is currently broken 
@@ -46,6 +41,11 @@ print('Starting meteor detection.')
 
 def isRectangular(w, h):
   return w > h * 1.7 or h > w * 1.7
+
+def isPossibleMeteor(contour):
+  rect = cv2.minAreaRect(contour)
+  w, h = rect[1]
+  return isRectangular(w, h) and cv2.contourArea(contour) > sizeOfMovementThreshold:
 
 def processVideo(filePath):
   print(f'Processing video at {filePath}')
@@ -94,44 +94,36 @@ def processVideo(filePath):
 
     cnts,res = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    j = 0
+    shouldSaveFrame = False
+
     for contour in cnts:
-      if cv2.contourArea(contour) > sizeOfMovementThreshold:
-        j += 1
+      if (not isPossibleMeteor(contour)):
+        continue
 
-        rect = cv2.minAreaRect(contour)
-        x, y = rect[0]
-        w, h = rect[1]
+      rect = cv2.minAreaRect(contour)
+      x, y = rect[0]
+      w, h = rect[1]
 
-        if (not isRectangular(w, h)):
-          continue
+      # distanceMoved = math.hypot(prevX - x, prevY - y)
+      if (saveOutline == True):
+        box = cv2.boxPoints(rect)
+        box = np.intp(box)
+        cv2.drawContours(frame,[box],0,(0,255,255),2)
 
-        # distanceMoved = math.hypot(prevX - x, prevY - y)
+      prevX = x
+      prevY = y
+      # if (showVideo == True):
+      #   cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0), 1)
 
-        if j == 1: # only log a single detected motion per frame
-          if debounceCount == 0:
-            seconds = i / fps
-            secondsDisplay = math.floor((seconds % 60 * 100)) / 100
-            minutesDisplay = math.floor((seconds / 60) % 60)
-            hoursDisplay = math.floor(seconds / 60 / 60)
-            motionTimestamp = f'{hoursDisplay}h-{minutesDisplay}m-{secondsDisplay}s'
-            log.write(f'Detected motion at {motionTimestamp} \n')
-            print(f'Detected motion at {motionTimestamp}')
-
-            if (saveOutline == True):
-              box = cv2.boxPoints(rect)
-              box = np.intp(box)
-              cv2.drawContours(frame,[box],0,(0,255,255),2)
-            cv2.imwrite(f'{outputPath}/motion-{motionTimestamp}.jpg', frame)
-
-          debounceCount += 1
-          if debounceCount == debounceLimit:
-            debounceCount = 0
-
-        prevX = x
-        prevY = y
-        # if (showVideo == True):
-        #   cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0), 1)
+    if (shouldSaveFrame == True):
+      seconds = i / fps
+      secondsDisplay = math.floor((seconds % 60 * 100)) / 100
+      minutesDisplay = math.floor((seconds / 60) % 60)
+      hoursDisplay = math.floor(seconds / 60 / 60)
+      motionTimestamp = f'{hoursDisplay}h-{minutesDisplay}m-{secondsDisplay}s'
+      cv2.imwrite(f'{outputPath}/motion-{motionTimestamp}.jpg', frame)
+      log.write(f'Detected motion at {motionTimestamp} \n')
+      print(f'Detected motion at {motionTimestamp}')
 
     if (showVideo == True):
       cv2.imshow("All Contours", frame)
